@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon | My New Site</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { 
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 15px; letter-spacing: 2px; }
+        p { font-size: 1.1rem; opacity: 0.8; line-height: 1.6; }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(0, 255, 150, 0.2);
+            border: 1px solid #00ff96;
+            color: #00ff96;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-card">
+        <div class="status-badge">DNS Test in Progress</div>
+        <h1>Something Big is Coming</h1>
+        <p>We are currently migrating this domain to its new home on GitHub. If you can see this, the custom domain setup was successful!</p>
+    </div>
+</body>
+</html>
