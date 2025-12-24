@@ -3,147 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automania | Powered by LUMA</title>
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.94/build/spline-viewer.js"></script>
+    <title>Automania | Efficiency Powered by LUMA</title>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.28/build/spline-viewer.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --accent: #00f2ff;
-            --bg: #050505;
-            --glass: rgba(0, 0, 0, 0.7);
+            --sky-blue: #00AEEF;
+            --soft-blue: #e6f7ff;
+            --white: #ffffff;
+            --dark: #0a0a0b;
+            --grey: #666;
+            --glass: rgba(255, 255, 255, 0.7);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
         
-        body { background-color: var(--bg); color: white; overflow-x: hidden; }
+        body { background-color: var(--white); color: var(--dark); overflow-x: hidden; }
 
-        /* Spline Background Wrapper */
-        .spline-container {
+        /* Fullscreen Spline Scene */
+        .spline-wrapper {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100vh;
             z-index: 1;
+            background: radial-gradient(circle at center, #f7fdff 0%, #ffffff 100%);
         }
 
-        /* Overlay UI */
-        .content-overlay {
+        /* Overlay Interface */
+        .ui-layer {
             position: relative;
             z-index: 10;
-            pointer-events: none; /* Allows interacting with 3D scene behind */
+            pointer-events: none; /* Let the user touch the 3D scene */
         }
 
-        .interactive-element { pointer-events: auto; } /* Re-enables clicks for buttons */
+        .clickable { pointer-events: auto; }
 
         nav {
-            padding: 2rem 5%;
+            padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .logo { font-weight: 900; font-size: 1.8rem; letter-spacing: 2px; }
-        .logo span { color: var(--accent); }
+        .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: 1px; }
+        .logo span { color: var(--sky-blue); }
 
-        .hero-section {
-            height: 100vh;
+        .hero {
+            height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 0 10%;
-            max-width: 800px;
+            padding: 0 8%;
+            max-width: 850px;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: var(--soft-blue);
+            color: var(--sky-blue);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            width: fit-content;
         }
 
-        h1 { font-size: 5rem; line-height: 1.1; margin-bottom: 20px; }
-        p { font-size: 1.2rem; color: #ccc; margin-bottom: 30px; line-height: 1.6; }
+        .dot { width: 8px; height: 8px; background: var(--sky-blue); border-radius: 50%; animation: pulse 2s infinite; }
 
-        .cta-group { display: flex; gap: 20px; }
-        .btn-primary {
-            background: var(--accent);
-            color: black;
-            padding: 15px 35px;
-            border-radius: 5px;
+        h1 { font-size: 5rem; line-height: 1; margin-bottom: 1.5rem; font-weight: 800; }
+        h1 span { color: var(--sky-blue); }
+        
+        p.lead { font-size: 1.25rem; color: var(--grey); margin-bottom: 2.5rem; line-height: 1.6; max-width: 550px; }
+
+        .btn-main {
+            background: var(--sky-blue);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 700;
-            transition: 0.3s;
+            display: inline-block;
+            box-shadow: 0 10px 20px rgba(0, 174, 239, 0.2);
+            transition: all 0.3s ease;
         }
 
-        /* Glass Cards Section */
-        .features {
-            padding: 100px 10%;
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 174, 239, 0.3); }
+
+        /* Feature Row */
+        .feature-grid {
+            background: var(--white);
+            padding: 80px 8%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            background: rgba(5,5,5,0.8);
-            backdrop-filter: blur(20px);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            border-top: 1px solid #f0f0f0;
         }
 
-        .card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 40px;
+        .f-card {
+            padding: 30px;
             border-radius: 20px;
+            border: 1px solid #f0f0f0;
             transition: 0.3s;
         }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .f-card:hover { border-color: var(--sky-blue); box-shadow: 0 20px 40px rgba(0,0,0,0.03); }
+        .f-card i { font-size: 2rem; color: var(--sky-blue); margin-bottom: 20px; }
+        .f-card h3 { margin-bottom: 10px; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
+            .hero { text-align: center; align-items: center; padding-top: 100px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="spline-container">
-        <spline-viewer url="https://prod.spline.design/wx9JKAJ4o4w0XfQ0/scene.splinecode"></spline-viewer>
+    <div class="spline-wrapper">
+        <spline-viewer url="https://prod.spline.design/NTqp7NNVAo9-hZXG/scene.splinecode"></spline-viewer>
     </div>
 
-    <div class="content-overlay">
-        <nav class="interactive-element">
+    <div class="ui-layer">
+        <nav class="clickable">
             <div class="logo">AUTO<span>MANIA</span></div>
-            <div class="nav-links">
-                <a href="#" style="color:white; text-decoration:none; margin-right:20px;">The Agent</a>
-                <a href="mailto:luma@automania.blog" class="btn-primary">Get LUMA</a>
-            </div>
+            <a href="mailto:hello@pule.blog" class="btn-main" style="padding: 10px 20px; font-size: 0.9rem;">Get Started</a>
         </nav>
 
-        <section class="hero-section">
-            <div class="badge interactive-element">Efficiency Agent Active</div>
-            <h1>Meet <span style="color: var(--accent);">LUMA</span>.</h1>
-            <p>The next generation of business intelligence. Automania integrates LUMA into your ecosystem to automate sales, optimize workflows, and drive hyper-efficiency.</p>
+        <main class="hero">
+            <div class="status-pill clickable">
+                <div class="dot"></div> Agent LUMA Online
+            </div>
+            <h1>The New Era of <span>Efficiency.</span></h1>
+            <p class="lead">Automania integrates high-performance AI agents into your core business, turning friction into flow.</p>
             
-            <div class="cta-group interactive-element">
-                <a href="#explore" class="btn-primary">Explore Ecosystem</a>
-                <a href="#" style="color:white; padding:15px; text-decoration:none;">View Case Studies →</a>
+            <div class="clickable">
+                <a href="#solutions" class="btn-main">Deploy Your Agent</a>
             </div>
-        </section>
+        </main>
 
-        <section class="features interactive-element" id="explore">
-            <div class="card">
-                <i class="fas fa-brain" style="color:var(--accent); font-size: 2rem; margin-bottom: 20px;"></i>
-                <h3>Cognitive Sales</h3>
-                <p>LUMA doesn't just chat; she converts. Using the same logic that powers Farm Mania, she handles leads with precision.</p>
+        <section class="feature-grid clickable" id="solutions">
+            <div class="f-card">
+                <i class="fas fa-microchip"></i>
+                <h3>Core Integration</h3>
+                <p>LUMA connects directly to your databases to provide real-time business automation.</p>
             </div>
-            <div class="card">
-                <i class="fas fa-bolt" style="color:var(--accent); font-size: 2rem; margin-bottom: 20px;"></i>
-                <h3>Rapid Integration</h3>
-                <p>Deploy Automania agents into your existing Discord, WhatsApp, or Web platforms in minutes.</p>
+            <div class="f-card">
+                <i class="fas fa-comment-dots"></i>
+                <h3>Sales Logic</h3>
+                <p>Automated sales agents that think, learn, and close deals while you sleep.</p>
             </div>
-            <div class="card">
-                <i class="fas fa-chart-line" style="color:var(--accent); font-size: 2rem; margin-bottom: 20px;"></i>
-                <h3>ROI Focused</h3>
-                <p>Automate 80% of repetitive tasks, allowing your human team to focus on high-value strategy.</p>
+            <div class="f-card">
+                <i class="fas fa-layer-group"></i>
+                <h3>Scalable Architecture</h3>
+                <p>Built on the same robust foundations as our Farm Mania and n8n ecosystems.</p>
             </div>
         </section>
     </div>
