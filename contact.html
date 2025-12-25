@@ -41,39 +41,49 @@
             padding: 20px 8%; height: 80px; width: 100%;
         }
         .brand { font-weight: 600; font-size: 1.2rem; letter-spacing: -0.01em; }
-        /* Add a simple back link logic */
-        .nav-back { text-decoration: none; color: var(--apple-black); font-size: 0.9rem; margin-right: 20px; opacity: 0.6; transition: 0.2s; }
+        .nav-back { text-decoration: none; color: var(--apple-black); font-size: 0.9rem; margin-right: 20px; opacity: 0.6; transition: 0.2s; display: flex; align-items: center; }
         .nav-back:hover { opacity: 1; color: var(--apple-blue); }
+        .nav-back svg { width: 16px; height: 16px; margin-right: 6px; stroke-width: 2.5; }
 
         /* MAIN CENTER CONTENT */
         .main-content {
             flex-grow: 1;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center horizontally */
-            padding: 0 20px;
+            padding: 0 8%; /* Adjusted padding for left alignment */
         }
 
         .contact-stack {
             width: 100%;
-            max-width: 500px;
+            max-width: 460px; /* Reduced max-width for a tighter feel */
             opacity: 0;
             transform: translateY(20px);
             animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             animation-delay: 0.2s;
+            text-align: left; /* Ensure left alignment */
         }
 
+        /* Updated Headline & Sub-message Styles */
         h1 { 
-            font-size: 3.5rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 30px; text-align: left;
+            font-size: 3rem; /* Reduced size */
+            font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 15px;
         }
         .accent-blue { color: var(--sky-blue); }
         .sub-grey { color: var(--apple-grey); }
+
+        .contact-message {
+            font-size: 1.05rem;
+            color: var(--apple-grey);
+            line-height: 1.5;
+            margin-bottom: 35px;
+            max-width: 400px;
+        }
 
         /* THE CONTACT LIST */
         .glass-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px; /* Slightly tighter gap */
         }
 
         .contact-row {
@@ -81,8 +91,8 @@
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-            padding: 25px 30px;
+            border-radius: 18px; /* Slightly smaller radius */
+            padding: 20px 25px; /* Reduced padding */
             transition: transform 0.3s ease, background 0.3s ease;
             cursor: pointer;
             display: flex;
@@ -93,15 +103,15 @@
 
         .contact-row:hover {
             background: rgba(255, 255, 255, 0.85);
-            transform: scale(1.02);
+            transform: scale(1.01); /* More subtle scale */
         }
 
         .row-info { display: flex; flex-direction: column; }
-        .row-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--apple-grey); margin-bottom: 4px; font-weight: 600; }
-        .row-value { font-size: 1.2rem; font-weight: 600; color: var(--apple-black); }
+        .row-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--apple-grey); margin-bottom: 4px; font-weight: 600; }
+        .row-value { font-size: 1.1rem; font-weight: 600; color: var(--apple-black); } /* Reduced font size */
         
         .row-icon { 
-            width: 40px; height: 40px; 
+            width: 36px; height: 36px; /* Smaller icon container */
             background: rgba(0, 174, 239, 0.1); 
             border-radius: 50%; 
             display: flex; align-items: center; justify-content: center;
@@ -109,7 +119,7 @@
         }
 
         /* SVG Styles */
-        svg { width: 20px; height: 20px; stroke-width: 2.5; }
+        svg { width: 18px; height: 18px; stroke-width: 2.5; } /* Smaller icons */
 
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
@@ -119,9 +129,10 @@
             .canvas-wrapper { position: fixed; }
             .interface-layer { height: auto; min-height: 100vh; }
             .main-content { padding: 60px 20px; align-items: flex-start; }
-            h1 { font-size: 2.8rem; }
-            .contact-row { padding: 20px; }
-            .row-value { font-size: 1.1rem; }
+            h1 { font-size: 2.4rem; }
+            .contact-message { font-size: 1rem; }
+            .contact-row { padding: 18px 20px; }
+            .row-value { font-size: 1rem; }
         }
     </style>
 </head>
@@ -139,7 +150,10 @@
     <div class="interface-layer" id="uiLayer">
         
         <nav class="active-element">
-            <a href="index.html" class="nav-back">← Home</a>
+            <a href="index.html" class="nav-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Home
+            </a>
             <div class="brand">Automania</div>
         </nav>
 
@@ -150,6 +164,10 @@
                     <span class="sub-grey">Ready to</span><br>
                     <span class="accent-blue">Connect?</span>
                 </h1>
+
+                <p class="contact-message">
+                    Reach out to our team with your project details. We'll analyze your needs and get back to you with a strategic path forward.
+                </p>
 
                 <div class="glass-list">
                     
