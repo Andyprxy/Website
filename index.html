@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automania | Solutions That Work</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contact | Automania</title>
     
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.28/build/spline-viewer.js"></script>
     
@@ -14,226 +14,206 @@
             --apple-blue: #0071e3;
             --sky-blue: #00AEEF;
             --system-bg: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --nav-glass: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.65);
         }
 
-        /* Official Apple Web Font Stack */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-            -webkit-font-smoothing: antialiased; 
-        }
+        /* TYPOGRAPHY */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
         
-        body { background-color: var(--system-bg); color: var(--apple-black); overflow-x: hidden; }
+        body { background-color: var(--system-bg); color: var(--apple-black); overflow: hidden; height: 100vh; width: 100%; }
 
-        .canvas-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; }
-        .interface-layer { position: relative; z-index: 2; pointer-events: none; }
+        /* LOADING SCREEN */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(0, 0, 0, 0.1); border-radius: 50%; border-top-color: var(--sky-blue); animation: spin 1s ease-in-out infinite; margin-bottom: 20px; }
+        .loading-text { font-size: 0.9rem; color: var(--apple-grey); font-weight: 500; letter-spacing: 0.02em; animation: pulse 2s infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* LAYOUT LAYERS */
+        .canvas-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .interface-layer { position: relative; z-index: 2; pointer-events: none; height: 100vh; display: flex; flex-direction: column; }
         .active-element { pointer-events: auto; }
 
-        /* -----------------------------------------------------------
-           FLOATING GLASS NAVIGATION
-           ----------------------------------------------------------- */
+        /* NAVIGATION */
         nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 980px;
+            display: flex; justify-content: flex-start; align-items: center;
+            padding: 20px 8%; height: 80px; width: 100%;
+        }
+        .brand { font-weight: 600; font-size: 1.2rem; letter-spacing: -0.01em; }
+        .nav-back { text-decoration: none; color: var(--apple-black); font-size: 0.9rem; margin-right: 20px; opacity: 0.6; transition: 0.2s; display: flex; align-items: center; }
+        .nav-back:hover { opacity: 1; color: var(--apple-blue); }
+        .nav-back svg { width: 16px; height: 16px; margin-right: 6px; stroke-width: 2.5; }
+
+        /* MAIN CENTER CONTENT */
+        .main-content {
+            flex-grow: 1;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 12px 24px;
-            
-            /* Glass Effect */
-            background: var(--nav-glass);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border: 1px solid rgba(255,255,255,0.5);
-            border-radius: 100px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            z-index: 100;
-            transition: all 0.3s ease;
+            padding: 0 8%; /* Adjusted padding for left alignment */
         }
 
-        .nav-brand { display: flex; flex-direction: column; line-height: 1.1; }
-        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.01em; }
-        .brand-sub { font-size: 0.65rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
-
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-
-        .nav-item {
-            text-decoration: none; color: var(--apple-black); font-size: 0.9rem; font-weight: 500;
-            opacity: 0.8; transition: all 0.2s ease; position: relative;
+        .contact-stack {
+            width: 100%;
+            max-width: 460px; /* Reduced max-width for a tighter feel */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation-delay: 0.2s;
+            text-align: left; /* Ensure left alignment */
         }
-        .nav-item:hover { opacity: 1; color: var(--apple-blue); }
 
-        /* Contact Button */
-        .nav-btn {
-            background: var(--apple-black); color: white; padding: 8px 20px;
-            border-radius: 30px; text-decoration: none; font-size: 0.9rem; font-weight: 500;
-            transition: transform 0.2s ease, background 0.2s ease;
+        /* Updated Headline & Sub-message Styles */
+        h1 { 
+            font-size: 3rem; /* Reduced size */
+            font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 15px;
         }
-        .nav-btn:hover { background: #000; transform: scale(1.05); }
-
-        /* -----------------------------------------------------------
-           SECTIONS
-           ----------------------------------------------------------- */
-        .hero { height: 90vh; display: flex; flex-direction: column; justify-content: center; padding-left: 10%; width: 100%; margin-top: 60px;}
-        .hero-content { max-width: 480px; }
-        .hero h1 { font-size: 5rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.05; }
-        .sub-grey { color: var(--apple-grey); display: block; margin-bottom: 5px; }
         .accent-blue { color: var(--sky-blue); }
-        .hero-desc { font-size: 1.35rem; line-height: 1.45; font-weight: 400; color: var(--apple-grey); margin-top: 1.5rem; letter-spacing: -0.01em; }
+        .sub-grey { color: var(--apple-grey); }
 
-        .services-wrapper {
-            padding: 120px 10% 60px 10%;
-            display: flex; justify-content: space-between; align-items: center;
-            background: linear-gradient(to bottom, transparent, #f5f5f7);
-            gap: 60px;
-            opacity: 0; transform: translateY(30px);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        .contact-message {
+            font-size: 1.05rem;
+            color: var(--apple-grey);
+            line-height: 1.5;
+            margin-bottom: 35px;
+            max-width: 400px;
         }
-        .services-wrapper.visible { opacity: 1; transform: translateY(0); }
-        
-        .services-list { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 550px; }
 
-        .service-tile {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(150%);
-            -webkit-backdrop-filter: blur(30px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 22px;
-            padding: 24px 32px;
+        /* THE CONTACT LIST */
+        .glass-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Slightly tighter gap */
+        }
+
+        .contact-row {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 18px; /* Slightly smaller radius */
+            padding: 20px 25px; /* Reduced padding */
+            transition: transform 0.3s ease, background 0.3s ease;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
         }
 
-        .service-tile h3 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.01em; }
-        .service-details { max-height: 0; opacity: 0; transition: all 0.5s ease; font-size: 1.05rem; line-height: 1.5; }
-        .service-details strong { display: block; color: var(--sky-blue); margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;}
-        .service-details span { color: var(--apple-grey); }
-        .service-tile.open .service-details { max-height: 300px; opacity: 1; margin-top: 15px; }
-
-        .action-area { 
-            width: 100%; display: flex; justify-content: center; 
-            padding: 40px 0 100px 0; background: #f5f5f7;
-            opacity: 0; transition: opacity 1s ease 0.5s;
+        .contact-row:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: scale(1.01); /* More subtle scale */
         }
-        .action-area.visible { opacity: 1; }
 
-        .btn-learn {
-            background: var(--apple-blue); color: white; padding: 14px 34px;
-            border-radius: 980px; text-decoration: none; font-size: 1.05rem;
-            font-weight: 400; transition: all 0.3s ease;
+        .row-info { display: flex; flex-direction: column; }
+        .row-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--apple-grey); margin-bottom: 4px; font-weight: 600; }
+        .row-value { font-size: 1.1rem; font-weight: 600; color: var(--apple-black); } /* Reduced font size */
+        
+        .row-icon { 
+            width: 36px; height: 36px; /* Smaller icon container */
+            background: rgba(0, 174, 239, 0.1); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            color: var(--sky-blue);
         }
-        .btn-learn:hover { background: #0077ed; transform: scale(1.03); }
 
-        .right-keywords { display: flex; flex-direction: column; text-align: right; gap: 15px; }
-        .keyword { font-size: 3.2rem; font-weight: 600; color: var(--sky-blue); letter-spacing: -0.02em; line-height: 1.1; }
+        /* SVG Styles */
+        svg { width: 18px; height: 18px; stroke-width: 2.5; } /* Smaller icons */
 
-        /* Mobile Responsive Adjustments */
-        @media (max-width: 1024px) {
-            nav { width: 95%; top: 10px; padding: 10px 20px; }
-            .nav-links { display: none; }
-            .nav-btn { display: block; padding: 6px 15px; font-size: 0.8rem; }
-            
-            .services-wrapper { flex-direction: column; text-align: center; }
-            .hero { align-items: center; text-align: center; padding-left: 5%; height: auto; padding-top: 150px; padding-bottom: 50px;}
-            .right-keywords { text-align: center; order: -1; margin-bottom: 40px; }
-            .keyword { font-size: 2.5rem; }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; height: auto; }
+            .canvas-wrapper { position: fixed; }
+            .interface-layer { height: auto; min-height: 100vh; }
+            .main-content { padding: 60px 20px; align-items: flex-start; }
+            h1 { font-size: 2.4rem; }
+            .contact-message { font-size: 1rem; }
+            .contact-row { padding: 18px 20px; }
+            .row-value { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="canvas-wrapper">
-        <spline-viewer logo="false" hint="false" url="https://prod.spline.design/NTqp7NNVAo9-hZXG/scene.splinecode"></spline-viewer>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loading-text">Initializing Environment...</div>
     </div>
 
-    <div class="interface-layer">
+    <div class="canvas-wrapper">
+        <spline-viewer id="spline" logo="false" hint="false" url="https://prod.spline.design/DT4aNg6qbPnbQfzv/scene.splinecode"></spline-viewer>
+    </div>
+
+    <div class="interface-layer" id="uiLayer">
         
         <nav class="active-element">
-            <div class="nav-brand">
-                <span class="brand-name">Automania</span>
-                <span class="brand-sub">LUMA Ecosystem</span>
-            </div>
-
-            <div class="nav-links">
-                <a href="#" class="nav-item">Home</a> <a href="about.html" class="nav-item">About</a>
-                <a href="#servicesSection" class="nav-item">Services</a>
-                <a href="#" class="nav-item">Agents</a>
-                <a href="#" class="nav-item">Projects</a>
-            </div>
-
-            <a href="contact.html" class="nav-btn">Contact</a>
+            <a href="index.html" class="nav-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Home
+            </a>
+            <div class="brand">Automania</div>
         </nav>
 
-        <main class="hero">
-            <div class="hero-content">
+        <div class="main-content">
+            <div class="contact-stack active-element">
+                
                 <h1>
-                    <span class="sub-grey">The New Era of</span>
-                    <span class="accent-blue">Efficiency.</span>
+                    <span class="sub-grey">Ready to</span><br>
+                    <span class="accent-blue">Connect?</span>
                 </h1>
-                <p class="hero-desc">At Automania, we don't just build systems. We offer solutions that work for you, so you don't have to.</p>
-            </div>
-        </main>
 
-        <section class="services-wrapper active-element" id="servicesSection">
-            <div class="services-list">
-                <div class="service-tile" onclick="this.classList.toggle('open')">
-                    <h3>3D Interactive Web</h3>
-                    <div class="service-details">
-                        <strong>Design that engages.</strong>
-                        <span>We build everything from high-end basic sites to immersive 3D experiences. We don't just build pages; we create digital environments that guide your customers automatically.</span>
+                <p class="contact-message">
+                    Reach out to our team with your project details. We'll analyze your needs and get back to you with a strategic path forward.
+                </p>
+
+                <div class="glass-list">
+                    
+                    <a href="mailto:AndileBrian25@Outlook.com" class="contact-row">
+                        <div class="row-info">
+                            <span class="row-label">Email</span>
+                            <span class="row-value">AndileBrian25@Outlook.com</span>
+                        </div>
+                        <div class="row-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                    </a>
+
+                    <a href="tel:+27616520417" class="contact-row">
+                        <div class="row-info">
+                            <span class="row-label">Direct Line</span>
+                            <span class="row-value">+27 61 652 0417</span>
+                        </div>
+                        <div class="row-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        </div>
+                    </a>
+
+                    <div class="contact-row">
+                        <div class="row-info">
+                            <span class="row-label">Headquarters</span>
+                            <span class="row-value">Johannesburg, South Africa</span>
+                        </div>
+                        <div class="row-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
                     </div>
-                </div>
 
-                <div class="service-tile" onclick="this.classList.toggle('open')">
-                    <h3>24/7 AI Agents</h3>
-                    <div class="service-details">
-                        <strong>Systems that work.</strong>
-                        <span>Deploy autonomous agents to manage your WhatsApp, answer customer questions, and take orders. We build a digital workforce that handles the work, so you don’t have to.</span>
-                    </div>
-                </div>
-
-                <div class="service-tile" onclick="this.classList.toggle('open')">
-                    <h3>Operational Dashboards</h3>
-                    <div class="service-details">
-                        <strong>Data you can see.</strong>
-                        <span>Control without the chaos. We create custom dashboards that visualize your day to day operations in one place, giving you total clarity on your business at a glance.</span>
-                    </div>
                 </div>
             </div>
-
-            <div class="right-keywords">
-                <span class="keyword">Design.</span>
-                <span class="keyword">Connect.</span>
-                <span class="keyword">Automate.</span>
-            </div>
-        </section>
-
-        <div class="action-area active-element" id="btnArea">
-            <a href="contact.html" class="btn-learn">Learn more</a>
         </div>
+
     </div>
 
     <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        observer.observe(document.getElementById('servicesSection'));
-        observer.observe(document.getElementById('btnArea'));
+        const viewer = document.getElementById('spline');
+        const loader = document.getElementById('loader');
+        const ui = document.getElementById('uiLayer');
+        function hideLoader() { loader.classList.add('hidden'); ui.classList.add('loaded'); }
+        viewer.addEventListener('load', () => { setTimeout(hideLoader, 500); });
+        setTimeout(() => { if (!loader.classList.contains('hidden')) { hideLoader(); } }, 4000);
     </script>
-
 </body>
 </html>
