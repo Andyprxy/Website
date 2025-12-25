@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Automania | Solutions That Work</title>
     
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.28/build/spline-viewer.js"></script>
@@ -34,7 +34,7 @@
         .active-element { pointer-events: auto; }
 
         /* -----------------------------------------------------------
-           FLOATING GLASS NAVIGATION
+           NAVIGATION
            ----------------------------------------------------------- */
         nav {
             position: fixed;
@@ -48,7 +48,6 @@
             align-items: center;
             padding: 12px 24px;
             
-            /* Glass Effect */
             background: var(--nav-glass);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -63,6 +62,7 @@
         .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.01em; }
         .brand-sub { font-size: 0.65rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
 
+        /* Desktop Links */
         .nav-links { display: flex; gap: 30px; align-items: center; }
 
         .nav-item {
@@ -71,13 +71,46 @@
         }
         .nav-item:hover { opacity: 1; color: var(--apple-blue); }
 
-        /* Contact Button */
         .nav-btn {
             background: var(--apple-black); color: white; padding: 8px 20px;
             border-radius: 30px; text-decoration: none; font-size: 0.9rem; font-weight: 500;
             transition: transform 0.2s ease, background 0.2s ease;
         }
         .nav-btn:hover { background: #000; transform: scale(1.05); }
+
+        /* Hamburger Icon (Hidden on Desktop) */
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 101; }
+        .bar { width: 25px; height: 2px; background-color: var(--apple-black); transition: 0.3s; }
+
+        /* -----------------------------------------------------------
+           MOBILE SIDEBAR MENU
+           ----------------------------------------------------------- */
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            z-index: 99;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 30px;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            pointer-events: auto;
+        }
+        
+        .mobile-menu.active { right: 0; }
+
+        .mobile-link {
+            text-decoration: none; color: var(--apple-black); font-size: 1.4rem; font-weight: 600;
+            opacity: 0; transform: translateY(20px); transition: all 0.3s ease;
+        }
+        
+        /* Staggered animation for links */
+        .mobile-menu.active .mobile-link { opacity: 1; transform: translateY(0); }
+        .mobile-menu.active .mobile-link:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active .mobile-link:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active .mobile-link:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active .mobile-link:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu.active .mobile-link:nth-child(5) { transition-delay: 0.5s; }
 
         /* -----------------------------------------------------------
            SECTIONS
@@ -136,14 +169,41 @@
         .right-keywords { display: flex; flex-direction: column; text-align: right; gap: 15px; }
         .keyword { font-size: 3.2rem; font-weight: 600; color: var(--sky-blue); letter-spacing: -0.02em; line-height: 1.1; }
 
-        /* Mobile Responsive Adjustments */
+        /* -----------------------------------------------------------
+           MOBILE RESPONSIVE ADJUSTMENTS
+           ----------------------------------------------------------- */
         @media (max-width: 1024px) {
             nav { width: 95%; top: 10px; padding: 10px 20px; }
-            .nav-links { display: none; }
-            .nav-btn { display: block; padding: 6px 15px; font-size: 0.8rem; }
+            .nav-links { display: none; } /* Hide default links */
+            .hamburger { display: flex; }   /* Show hamburger */
+            .nav-btn { display: none; }     /* Hide default contact btn */
+
+            /* Hero adjustments for Balance */
+            .hero { 
+                align-items: flex-start; /* Left align text */
+                text-align: left; 
+                padding-left: 24px; 
+                padding-right: 24px;
+                padding-top: 100px; /* Push down so nav doesn't cover */
+                height: 100vh;
+                justify-content: flex-start; /* Move text towards top */
+            }
             
+            .hero-content {
+                margin-top: 80px; /* Space from top */
+                max-width: 100%;
+                /* Add a subtle background blur to ensure text is readable over 3D model */
+                background: rgba(255, 255, 255, 0.3);
+                backdrop-filter: blur(10px);
+                padding: 20px;
+                border-radius: 20px;
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+
+            .hero h1 { font-size: 3.5rem; }
+            .hero-desc { font-size: 1.1rem; }
+
             .services-wrapper { flex-direction: column; text-align: center; }
-            .hero { align-items: center; text-align: center; padding-left: 5%; height: auto; padding-top: 150px; padding-bottom: 50px;}
             .right-keywords { text-align: center; order: -1; margin-bottom: 40px; }
             .keyword { font-size: 2.5rem; }
         }
@@ -152,7 +212,16 @@
 <body>
 
     <div class="canvas-wrapper">
-        <spline-viewer logo="false" hint="false" url="https://prod.spline.design/NTqp7NNVAo9-hZXG/scene.splinecode"></spline-viewer>
+        <spline-viewer id="spline" logo="false" hint="false" url="https://prod.spline.design/NTqp7NNVAo9-hZXG/scene.splinecode"></spline-viewer>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="mobile-link" onclick="toggleMenu()">Home</a>
+        <a href="about.html" class="mobile-link" onclick="toggleMenu()">About</a>
+        <a href="#servicesSection" class="mobile-link" onclick="toggleMenu()">Services</a>
+        <a href="#" class="mobile-link" onclick="toggleMenu()">Agents</a>
+        <a href="#" class="mobile-link" onclick="toggleMenu()">Projects</a>
+        <a href="contact.html" class="mobile-link" style="color: var(--sky-blue);" onclick="toggleMenu()">Contact Us</a>
     </div>
 
     <div class="interface-layer">
@@ -172,6 +241,12 @@
             </div>
 
             <a href="contact.html" class="nav-btn">Contact</a>
+
+            <div class="hamburger active-element" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
         </nav>
 
         <main class="hero">
@@ -224,6 +299,13 @@
     </div>
 
     <script>
+        // 1. Mobile Menu Logic
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // 2. Scroll Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -234,6 +316,16 @@
 
         observer.observe(document.getElementById('servicesSection'));
         observer.observe(document.getElementById('btnArea'));
+
+        // 3. Remove Spline Logo
+        const viewer = document.getElementById('spline');
+        viewer.addEventListener('load', () => { 
+            if (viewer.shadowRoot) {
+                const style = document.createElement('style');
+                style.textContent = '#logo { display: none !important; }'; 
+                viewer.shadowRoot.appendChild(style);
+            }
+        });
     </script>
 
 </body>
