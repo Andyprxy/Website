@@ -80,11 +80,7 @@
         }
 
         /* THE CONTACT LIST */
-        .glass-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .glass-list { display: flex; flex-direction: column; gap: 12px; }
 
         .contact-row {
             background: rgba(255, 255, 255, 0.5);
@@ -95,16 +91,10 @@
             padding: 20px 25px;
             transition: transform 0.3s ease, background 0.3s ease;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
+            display: flex; align-items: center; justify-content: space-between; text-decoration: none;
         }
 
-        .contact-row:hover {
-            background: rgba(255, 255, 255, 0.85);
-            transform: scale(1.01);
-        }
+        .contact-row:hover { background: rgba(255, 255, 255, 0.85); transform: scale(1.01); }
 
         .row-info { display: flex; flex-direction: column; }
         .row-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--apple-grey); margin-bottom: 4px; font-weight: 600; }
@@ -210,9 +200,28 @@
         const viewer = document.getElementById('spline');
         const loader = document.getElementById('loader');
         const ui = document.getElementById('uiLayer');
-        function hideLoader() { loader.classList.add('hidden'); ui.classList.add('loaded'); }
-        viewer.addEventListener('load', () => { setTimeout(hideLoader, 500); });
-        setTimeout(() => { if (!loader.classList.contains('hidden')) { hideLoader(); } }, 4000);
+
+        function hideLoader() { 
+            loader.classList.add('hidden'); 
+            ui.classList.add('loaded'); 
+        }
+
+        viewer.addEventListener('load', () => { 
+            // 1. Force hide the logo using Shadow DOM injection
+            if (viewer.shadowRoot) {
+                const style = document.createElement('style');
+                style.textContent = '#logo { display: none !important; }'; 
+                viewer.shadowRoot.appendChild(style);
+            }
+            
+            // 2. Hide loader
+            setTimeout(hideLoader, 500); 
+        });
+
+        // Fallback safety
+        setTimeout(() => { 
+            if (!loader.classList.contains('hidden')) { hideLoader(); } 
+        }, 4000);
     </script>
 </body>
 </html>
